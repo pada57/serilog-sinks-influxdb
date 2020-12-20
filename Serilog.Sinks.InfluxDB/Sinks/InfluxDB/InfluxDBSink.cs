@@ -56,7 +56,7 @@ namespace Serilog.Sinks.InfluxDB
             _influxDbClient = CreateInfluxDbClient();
             _formatProvider = formatProvider;
 
-            CreateDatabase();
+            Task.Run(() => CreateDatabase());
         }
 
         /// <inheritdoc />
@@ -68,13 +68,17 @@ namespace Serilog.Sinks.InfluxDB
         /// not both.</remarks>
         protected override async Task EmitBatchAsync(IEnumerable<LogEvent> events)
         {
-            if (events == null) throw new ArgumentNullException(nameof(events));
+            if (events == null){
+                throw new ArgumentNullException(nameof(events));
+            }
 
             var logEvents = events as List<LogEvent> ?? events.ToList();
             var points = new List<Point>(logEvents.Count);
 
             foreach (var logEvent in logEvents)
             {
+                SyslogSeverity severity = SerilogSyslogSeverityConvertor.GetSyslogSeverity(logEvent.Level);
+
                 var p = new Point
                 {
                     Name = _source,
@@ -83,13 +87,27 @@ namespace Serilog.Sinks.InfluxDB
                 };
 
                 // Add tags
-                if (logEvent.Exception != null) p.Tags.Add("exceptionType", logEvent.Exception.GetType().Name);
-                if (logEvent.MessageTemplate != null) p.Tags.Add("messageTemplate", logEvent.MessageTemplate.Text);
+                if (logEvent.Exception != null){
+                    p.Tags.Add("exceptionType", logEvent.Exception.GetType().Name);
+                }
 
-                p.Tags.Add("level", logEvent.Level.ToString());
+                if (logEvent.MessageTemplate != null){
+                    p.Tags.Add("messageTemplate", logEvent.MessageTemplate.Text);
+                }
+
+                p.Tags.Add("appname", "app1");
+                p.Tags.Add("facility", "MyFacility");
+                p.Tags.Add("host", Environment.MachineName);
+                p.Tags.Add("hostname", Environment.MachineName);
+                p.Tags.Add("severity", severity.Severity);
 
                 // Add rendered message
+                p.Fields["facility_code"] = 16;
                 p.Fields["message"] = logEvent.RenderMessage(_formatProvider);
+                p.Fields["procid"] = "1234";
+                p.Fields["severity_code"] = severity.SeverityCode;
+                p.Fields["timestamp"] = DateTimeOffset.Now.ToUnixTimeMilliseconds() * 1000000;
+                p.Fields["version"] = 1;
 
                 points.Add(p);
             }
@@ -105,20 +123,20 @@ namespace Serilog.Sinks.InfluxDB
         {
             return new InfluxDbClient(
                 $"{_connectionInfo.Address}:{_connectionInfo.Port}",
-                _connectionInfo.Username,
-                _connectionInfo.Password,
+                _connectionInfo?.Username ?? "",
+                _connectionInfo?.Password ?? "",
                 InfluxDbVersion.Latest);
         }
 
         /// <summary>
         /// Create the log database in InfluxDB if it does not exists.
         /// </summary>
-        private void CreateDatabase()
+        private async Task CreateDatabase()
         {
-            var dbList = _influxDbClient.Database.GetDatabasesAsync().Result;
+            var dbList = await _influxDbClient.Database.GetDatabasesAsync();
             if (dbList.All(db => db.Name != _connectionInfo.DbName))
             {
-                var _ = _influxDbClient.Database.CreateDatabaseAsync(_connectionInfo.DbName).Result;
+                var _ = await _influxDbClient.Database.CreateDatabaseAsync(_connectionInfo.DbName);
             }
         }
     }
