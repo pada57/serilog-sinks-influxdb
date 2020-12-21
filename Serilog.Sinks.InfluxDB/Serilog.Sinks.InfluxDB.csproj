@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>InfluxDB sink for Serilog with .NET standard 2.0.</Description>
-    <Authors>Thiago Barradas;rifatx;iss0</Authors>
+    <Description>InfluxDB sink for Serilog with .NET standard 2.0 using syslog format for Influx1.X.</Description>
+    <Authors>Thiago Barradas;rifatx;iss0;Steven Jabbour;Mark Burton</Authors>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>Serilog.Sinks.InfluxDB.Standard</PackageId>
+    <PackageId>Serilog.Sinks.InfluxDB.Syslog</PackageId>
     <PackageTags>serilog;logging;semantic;structured;influxdb;netcore;netcore2;netstandard2;netstandard2.0</PackageTags>
-    <PackageIconUrl>http://serilog.net/images/serilog-sink-nuget.png</PackageIconUrl>
-    <PackageProjectUrl>https://github.com/ThiagoBarradas/serilog-sinks-influxdb</PackageProjectUrl>
-    <Product>Serilog.Sinks.InfluxDB.Standard</Product>
+    <PackageIcon>https://serilog.net/images/serilog-sink-nuget.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/pada57/serilog-sinks-influxdb</PackageProjectUrl>
+    <Product>Serilog.Sinks.InfluxDB.Syslog</Product>
   </PropertyGroup>
 
   <ItemGroup>
