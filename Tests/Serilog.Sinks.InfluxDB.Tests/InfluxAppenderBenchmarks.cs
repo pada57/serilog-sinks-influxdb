@@ -19,7 +19,11 @@ namespace Serilog.Sinks.InfluxDB.Tests
         public void SetupWithLayout()
         {
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.InfluxDB("source", new InfluxDBConnectionInfo())
+                .WriteTo.InfluxDB("benchmark", "benchmarkInstance", new InfluxDBConnectionInfo()
+                {
+                    Uri = new Uri("http://127.0.0.1:8086"),
+                    DbName = "_internal",
+                })
                 .CreateLogger();
 
 
@@ -81,7 +85,10 @@ namespace Serilog.Sinks.InfluxDB.Tests
             {
                 var loggerConfig = new LoggerConfiguration()
                     .MinimumLevel.Information()
-                    .WriteTo.InfluxDB("source", new InfluxDBConnectionInfo());
+                    .WriteTo.InfluxDB("source", "", new InfluxDBConnectionInfo() {
+                        Uri = new Uri("http://127.0.0.1:8086"),
+                        DbName = "_internal",
+                    });
                 var logger = loggerConfig.CreateLogger();
 
                 logger.Information("Hello Information");

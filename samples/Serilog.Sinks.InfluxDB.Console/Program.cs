@@ -73,10 +73,9 @@ namespace Serilog.Sinks.InfluxDB.Console
             var sw = System.Diagnostics.Stopwatch.StartNew();
 
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.InfluxDB("syslog", new InfluxDBConnectionInfo() {
-                    Address = "http://127.0.0.1",
+                .WriteTo.InfluxDB("app2", "local2", new InfluxDBConnectionInfo() { 
+                    Uri = new Uri("http://127.0.0.1:8086"),
                     DbName = "_internal",
-                    Port = 8086
                 })
                 .CreateLogger();
 
