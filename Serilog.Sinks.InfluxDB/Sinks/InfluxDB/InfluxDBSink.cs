@@ -18,6 +18,7 @@ namespace Serilog.Sinks.InfluxDB
     {
         private readonly string _applicationName;
         private readonly string _instanceName;
+        private readonly bool _includeFullException;
 
         private readonly IFormatProvider _formatProvider;
 
@@ -56,6 +57,7 @@ namespace Serilog.Sinks.InfluxDB
             _applicationName = options.ApplicationName;
             _instanceName = options.InstanceName ?? _applicationName;
             _formatProvider = options.FormatProvider;
+            _includeFullException = options.IncludeFullException;
 
             _influxDbClient = CreateInfluxDbClient();
 
@@ -101,6 +103,8 @@ namespace Serilog.Sinks.InfluxDB
                 p.Fields[Fields.Severity] = severity.ToString();
                 p.Fields[Fields.Timestamp] = logEvent.Timestamp.ToUnixTimeMilliseconds() * 1000000;
                 p.Fields[Fields.Version] = 1;
+                
+                if (_includeFullException && logEvent.Exception != null) p.Fields[Fields.Exception] = logEvent.Exception.ToString();
 
                 points.Add(p);
             }

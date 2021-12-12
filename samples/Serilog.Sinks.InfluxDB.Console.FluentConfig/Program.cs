@@ -16,7 +16,9 @@ using System.Threading.Tasks;
 namespace Serilog.Sinks.InfluxDB.Console.FluentConfig
 {
     class Program
-    {
+    {        
+        private const string LocalInfluxUrl = "http://localhost:8086";
+
         static async Task Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
@@ -24,7 +26,7 @@ namespace Serilog.Sinks.InfluxDB.Console.FluentConfig
                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                .Enrich.FromLogContext()
                .WriteTo.InfluxDB("Test App"      // Application Name
-                    , "http://localhost:8086"    // InfluxDb Address
+                    , LocalInfluxUrl    // InfluxDb Address
                 )
                .CreateLogger();
 
@@ -91,7 +93,7 @@ namespace Serilog.Sinks.InfluxDB.Console.FluentConfig
                     InstanceName = "fluentSampleInstance",
                     ConnectionInfo = new InfluxDBConnectionInfo()
                     {
-                        Uri = new Uri("http://127.0.0.1:8086"),
+                        Uri = new Uri(LocalInfluxUrl),
                         DbName = "_internal",
                     },
                     BatchOptions = new PeriodicBatching.PeriodicBatchingSinkOptions()
@@ -100,7 +102,8 @@ namespace Serilog.Sinks.InfluxDB.Console.FluentConfig
                         Period = TimeSpan.FromSeconds(10),
                         EagerlyEmitFirstEvent = true,
                         QueueLimit = null
-                    }
+                    },
+                    IncludeFullException = true
                 })
                 .CreateLogger();
 
@@ -108,6 +111,7 @@ namespace Serilog.Sinks.InfluxDB.Console.FluentConfig
             {
                 Log.Information("Hello, InfluxDB logger!");
                 Log.Error("Error, InfluxDB logger!");
+                Log.Error(new NullReferenceException("this is null but get rest :)"),  "Null exception has been thrown, see exception for details...");
             }
 
             Log.CloseAndFlush();

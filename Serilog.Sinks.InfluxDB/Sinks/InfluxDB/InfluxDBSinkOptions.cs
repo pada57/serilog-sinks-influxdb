@@ -9,6 +9,8 @@ namespace Serilog.Sinks.InfluxDB
 
         public string InstanceName { get; set; }
 
+        public bool IncludeFullException { get; set; }
+
         public InfluxDBConnectionInfo ConnectionInfo { get; set; } = new InfluxDBConnectionInfo();
 
         public PeriodicBatchingSinkOptions BatchOptions { get; set; } = new PeriodicBatchingSinkOptions();

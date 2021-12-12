@@ -3,7 +3,7 @@ version: '2'
 services:  
   # Define an InfluxDB service
   influxdb:
-    image: influxdb:latest
+    image: influxdb:1.8
     # To uncomment and adapt for mounting volumes
     #volumes:
     #  - D:/docker/data/influxdb:/var/lib/influxdb
