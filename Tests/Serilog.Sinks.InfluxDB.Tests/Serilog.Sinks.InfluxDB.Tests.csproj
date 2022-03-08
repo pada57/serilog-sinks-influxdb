@@ -13,12 +13,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="3.1.0">
+    <PackageReference Include="coverlet.collector" Version="3.1.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
       <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
-      <PackageReference Include="Moq" Version="4.16.1" />
+      <PackageReference Include="Moq" Version="4.17.2" />
       <PackageReference Include="RichardSzalay.MockHttp" Version="6.0.0" />
       <PackageReference Include="Xunit.SkippableFact" Version="1.4.13" />
     </ItemGroup>

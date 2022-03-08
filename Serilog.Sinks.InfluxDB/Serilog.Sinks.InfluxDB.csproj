@@ -15,6 +15,8 @@
     <RepositoryType>git</RepositoryType>
     <Version>1.4.0</Version>    
     <PackageReleaseNotes>
+		1.4.1:
+		- Update nuget dependency Serilog.Sinks.PeriodicBatching
 		1.4.0:
 		- New parameter IncludeFullException default to false
 		- Update nuget dependencies
@@ -48,7 +50,7 @@
   <ItemGroup>
     <PackageReference Include="InfluxData.Net" Version="8.0.1" />
     <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.3.0" />
+    <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.3.1" />
   </ItemGroup>
 
 <ItemGroup>
