@@ -13,7 +13,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/pada57/serilog-sinks-influxdb</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>1.4.0</Version>    
+    <Version>1.4.1</Version>    
     <PackageReleaseNotes>
 		1.4.1:
 		- Update nuget dependency Serilog.Sinks.PeriodicBatching
@@ -43,8 +43,8 @@
 		- Forked fromhttps://github.com/ThiagoBarradas/serilog-sinks-influxdb
 		- Adaption for syslog format
 		- Fix 400 errors due to invalid characters with JSON payload</PackageReleaseNotes>
-    <AssemblyVersion>1.4.0.0</AssemblyVersion>
-    <FileVersion>1.4.0.0</FileVersion>
+    <AssemblyVersion>1.4.1.0</AssemblyVersion>
+    <FileVersion>1.4.1.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
