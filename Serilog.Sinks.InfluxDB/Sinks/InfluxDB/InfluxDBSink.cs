@@ -3,6 +3,7 @@ using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Core.Exceptions;
 using InfluxDB.Client.Writes;
 using Serilog.Debugging;
+using Serilog.Events;
 using Serilog.Sinks.PeriodicBatching;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,8 @@ namespace Serilog.Sinks.InfluxDB
         private readonly string _instanceName;
         
         private readonly bool _includeFullException;
+
+        private readonly bool _includeContextAttributes;
 
         private readonly IFormatProvider _formatProvider;
 
@@ -72,6 +75,8 @@ namespace Serilog.Sinks.InfluxDB
 
             _includeFullException = options.IncludeFullException ?? false;
 
+            _includeContextAttributes = options.IncludeContextAttributes ?? false;
+
             CreateBucketIfNotExists();
 
             _influxDbClient = CreateInfluxDbClientWithWriteAccess();
@@ -88,6 +93,13 @@ namespace Serilog.Sinks.InfluxDB
 
             var logEvents = batch as List<Events.LogEvent> ?? batch.ToList();
             var points = new List<PointData>(logEvents.Count);
+
+            // Will be added as standard fileds and tags
+            List<string> excludeContextAttributes = new List<string>()
+            {
+                Tags.Level, Tags.AppName, Tags.Facility, Tags.Hostname, Tags.Severity,
+                Fields.Message, Fields.Facility,Fields.ProcId,Fields.Severity,Fields.Timestamp, Fields.Version
+            };
 
             foreach (var logEvent in logEvents)
             {
@@ -106,6 +118,15 @@ namespace Serilog.Sinks.InfluxDB
                     .Field(Fields.Timestamp, logEvent.Timestamp.ToUnixTimeMilliseconds() * 1000000)
                     .Field(Fields.Version, Fields.Values.Version)
                     .Timestamp(logEvent.Timestamp.UtcDateTime, WritePrecision.Ms);
+
+                if(_includeContextAttributes)
+                {
+                    foreach (string key in logEvent.Properties.Keys.Except(excludeContextAttributes))
+                    {
+                        logEvent.Properties.TryGetValue(key, out var value);
+                        p = p.Tag(key, value?.ToString());
+                    }
+                }
 
                 if (logEvent.Exception != null) p = p.Tag(Tags.ExceptionType, logEvent.Exception.GetType().Name);
 

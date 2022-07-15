@@ -11,6 +11,8 @@ namespace Serilog.Sinks.InfluxDB
 
         public bool? IncludeFullException { get; set; } = false;
 
+        public bool? IncludeContextAttributes { get; set; } = false;
+
         public InfluxDBConnectionInfo ConnectionInfo { get; set; } = new InfluxDBConnectionInfo();
 
         public PeriodicBatchingSinkOptions BatchOptions { get; set; } = new PeriodicBatchingSinkOptions();

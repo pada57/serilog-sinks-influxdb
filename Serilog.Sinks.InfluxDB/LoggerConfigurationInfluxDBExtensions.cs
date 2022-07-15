@@ -22,13 +22,14 @@ namespace Serilog
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
             PeriodicBatchingSinkOptions batchingOptions = null,
             IFormatProvider formatProvider = null,
-            bool includeFullException = false)
+            bool includeFullException = false,
+            bool includeContextAttributes = false)
         {
             if (string.IsNullOrEmpty(uriString)) throw new ArgumentNullException(nameof(uriString));
             if (!Uri.TryCreate(uriString, UriKind.Absolute, out var _)) throw new ArgumentException($"Invalid uri : {uriString}");
 
             return InfluxDB(loggerConfiguration, applicationName, new Uri(uriString), organizationId, bucketName, instanceName,
-                token, restrictedToMinimumLevel, batchingOptions, formatProvider, includeFullException);
+                token, restrictedToMinimumLevel, batchingOptions, formatProvider, includeFullException, includeContextAttributes);
         }
 
         /// <summary>
@@ -45,7 +46,8 @@ namespace Serilog
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
             PeriodicBatchingSinkOptions batchingOptions = null,
             IFormatProvider formatProvider = null,
-            bool includeFullException = false)
+            bool includeFullException = false,
+            bool includeContextAttributes = false)
         {
             if (uri == null) throw new ArgumentNullException(nameof(uri));
             if (loggerConfiguration == null) throw new ArgumentNullException(nameof(loggerConfiguration));
@@ -64,7 +66,8 @@ namespace Serilog
                 },
                 BatchOptions = batchingOptions,
                 FormatProvider = formatProvider,
-                IncludeFullException = includeFullException
+                IncludeFullException = includeFullException,
+                IncludeContextAttributes = includeContextAttributes
             };
 
             return InfluxDB(loggerConfiguration, sinkOptions, restrictedToMinimumLevel);
