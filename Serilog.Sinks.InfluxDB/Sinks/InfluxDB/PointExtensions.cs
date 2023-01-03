@@ -11,7 +11,7 @@ namespace Serilog.Sinks.InfluxDB
             {
                 if (logEvent.Properties.ContainsKey(extendedTag))
                 {
-                    builder.Tag(extendedTag, logEvent.Properties[extendedTag].ToString());
+                    builder.Tag(extendedTag, logEvent.Properties[extendedTag].ToString().Trim('"'));
                 }
             }
             return builder;
