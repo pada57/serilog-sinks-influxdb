@@ -65,6 +65,6 @@ public class PointExtensionsTest
 
         tags.TryGetValue(testProperty, out var storedValue);
 
-        Assert.Equal("\"Stored Value\"", storedValue);
+        Assert.Equal("Stored Value", storedValue);
     }
 }
