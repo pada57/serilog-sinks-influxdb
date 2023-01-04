@@ -53,7 +53,7 @@ namespace Serilog.Sinks.InfluxDB
             if (options is null) throw new ArgumentNullException(nameof(options));
 
             _connectionInfo = options.ConnectionInfo ?? throw new ArgumentNullException(nameof(options.ConnectionInfo));
-            _applicationName = options.ApplicationName ?? throw new ArgumentNullException(nameof(options.ApplicationName));
+            _applicationName = options.ApplicationName;
 
             if (_connectionInfo.Uri is null) throw new ArgumentNullException(nameof(_connectionInfo.Uri));
             if (_connectionInfo.BucketName is null) throw new ArgumentNullException(nameof(_connectionInfo.BucketName));
@@ -101,8 +101,8 @@ namespace Serilog.Sinks.InfluxDB
 
                 var p = PointData.Builder.Measurement(PointName)
                     .Tag(Tags.Level, logEvent.Level.ToString())
-                    .Tag(Tags.AppName, _applicationName)
-                    .Tag(Tags.Facility, _instanceName)
+                    .OptionalTag(Tags.AppName, _applicationName)
+                    .OptionalTag(Tags.Facility, _instanceName)
                     .Tag(Tags.Hostname, Environment.MachineName)
                     .Tag(Tags.Severity, severity.ToString())
                     .Field(Fields.Message, StripSpecialCharacter(logEvent.RenderMessage(_formatProvider)))

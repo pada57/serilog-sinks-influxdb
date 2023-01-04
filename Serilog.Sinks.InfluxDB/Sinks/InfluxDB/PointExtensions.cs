@@ -5,6 +5,15 @@ namespace Serilog.Sinks.InfluxDB
 {
     static class PointDataExtensions
     {
+        public static PointData.Builder OptionalTag(this PointData.Builder builder, string name, string value)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                builder.Tag(name, value);
+            }
+            return builder;
+        }
+
         public static PointData.Builder ExtendTags(this PointData.Builder builder, Events.LogEvent logEvent, string[] tags)
         {
             foreach (var extendedTag in tags)
