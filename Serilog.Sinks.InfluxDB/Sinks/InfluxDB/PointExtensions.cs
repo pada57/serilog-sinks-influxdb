@@ -9,9 +9,11 @@ namespace Serilog.Sinks.InfluxDB
         {
             foreach (var extendedTag in tags)
             {
-                if (logEvent.Properties.ContainsKey(extendedTag))
+                var (sourceName, targetName) = extendedTag.Parse();
+
+                if (logEvent.Properties.TryGetValue(sourceName, out var value))
                 {
-                    builder.Tag(extendedTag, logEvent.Properties[extendedTag].ToString().Trim('"'));
+                    builder.Tag(targetName, value.ToString().Trim('"'));
                 }
             }
             return builder;
@@ -22,49 +24,60 @@ namespace Serilog.Sinks.InfluxDB
         {
             foreach (var extendedField in fields)
             {
-                if (logEvent.Properties.ContainsKey(extendedField))
-                {
-                    var sv = logEvent.Properties[extendedField] as ScalarValue;
+                var (sourceName, targetName) = extendedField.Parse();
 
+                if (logEvent.Properties.TryGetValue(sourceName, out var value))
+                {
                     //TODO manage other types SequenceValue , StructureValue 
 
-                    if (sv is null) continue;
+                    if (!(value is ScalarValue sv))
+                        continue;
 
                     switch (sv.Value)
                     {
                         case bool bl:
-                            builder.Field(extendedField, bl);
+                            builder.Field(targetName, bl);
                             break;
                         case int i:
-                            builder.Field(extendedField, i);
+                            builder.Field(targetName, i);
                             break;
                         case double db:
-                            builder.Field(extendedField, db);
+                            builder.Field(targetName, db);
                             break;
                         case decimal dc:
-                            builder.Field(extendedField, dc);
+                            builder.Field(targetName, dc);
                             break;
                         case long l:
-                            builder.Field(extendedField, l);
+                            builder.Field(targetName, l);
                             break;
                         case uint ui:
-                            builder.Field(extendedField, ui);
+                            builder.Field(targetName, ui);
                             break;
                         case ulong u:
-                            builder.Field(extendedField, u);
+                            builder.Field(targetName, u);
                             break;
                         case byte b:
-                            builder.Field(extendedField, b);
+                            builder.Field(targetName, b);
                             break;
                         case null:
                         default:
-                            builder.Field(extendedField, logEvent.Properties[extendedField].ToString());
+                            builder.Field(targetName, value.ToString());
                             break;
                     }
                 }
             }
 
             return builder;
+        }
+
+        private static (string, string) Parse(this string value)
+        {
+            var i = value.IndexOf(':');
+
+            if (i <= 0)
+                return (value, value);
+
+            return (value.Substring(0, i), value.Substring(i + 1));
         }
     }
 }
