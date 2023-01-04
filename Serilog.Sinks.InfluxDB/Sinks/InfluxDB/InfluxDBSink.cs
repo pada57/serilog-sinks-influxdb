@@ -107,7 +107,7 @@ namespace Serilog.Sinks.InfluxDB
                     .Tag(Tags.Severity, severity.ToString())
                     .Field(Fields.Message, StripSpecialCharacter(logEvent.RenderMessage(_formatProvider)))
                     .Field(Fields.Facility, Fields.Values.Facility)
-                    .Field(Fields.ProcId, Process.GetCurrentProcess().Id)
+                    .Field(Fields.ProcId, Process.GetCurrentProcess().Id.ToString())
                     .Field(Fields.Severity, severity.ToString())
                     .Field(Fields.Timestamp, logEvent.Timestamp.ToUnixTimeMilliseconds() * 1000000)
                     .Field(Fields.Version, Fields.Values.Version)
