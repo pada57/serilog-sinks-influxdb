@@ -11,9 +11,11 @@ namespace Serilog.Sinks.InfluxDB
             {
                 var (sourceName, targetName) = extendedTag.Parse();
 
-                if (logEvent.Properties.TryGetValue(sourceName, out var value))
+                if (logEvent.Properties.TryGetValue(sourceName, out var propertyValue))
                 {
-                    builder.Tag(targetName, value.ToString().Trim('"'));
+                    var value = ((propertyValue is ScalarValue sv) && (sv.Value is string text)) ? text : propertyValue.ToString();
+
+                    builder.Tag(targetName, value);
                 }
             }
             return builder;
@@ -59,9 +61,12 @@ namespace Serilog.Sinks.InfluxDB
                         case byte b:
                             builder.Field(targetName, b);
                             break;
+                        case string s:
+                            builder.Field(targetName, s);
+                            break;
                         case null:
                         default:
-                            builder.Field(targetName, value.ToString());
+                            builder.Field(targetName, value?.ToString());
                             break;
                     }
                 }

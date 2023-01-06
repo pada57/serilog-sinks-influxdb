@@ -3,6 +3,7 @@ using Serilog.Events;
 using Serilog.Parsing;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 using Xunit;
 
@@ -10,15 +11,18 @@ namespace Serilog.Sinks.InfluxDB.Tests;
 
 public class PointExtensionsTest
 {
-    [Fact]
-    public void ValuesAreAddedToFields()
+    [Theory]
+    [InlineData("Stored Value")]
+    [InlineData(42L)]
+    [InlineData(Math.PI)]
+    public void ValuesAreAddedToFields(object value)
     {
         //Arrange
         var testProperty = "Test Property";
 
         var p = PointData.Builder.Measurement("test");
 
-        LogEventProperty[] properties = { new LogEventProperty(testProperty, new ScalarValue("Stored Value")) };
+        LogEventProperty[] properties = { new LogEventProperty(testProperty, new ScalarValue(value)) };
 
         var le = new LogEvent(DateTime.Now, LogEventLevel.Error, new Exception(), new MessageTemplate("", Array.Empty<MessageTemplateToken>()), properties);
 
@@ -36,18 +40,21 @@ public class PointExtensionsTest
 
         fields.TryGetValue(testProperty, out var storedValue);
 
-        Assert.Equal("\"Stored Value\"", storedValue);
+        Assert.Equal(value, storedValue);
     }
 
-    [Fact]
-    public void ValuesAreAddedToTags()
+    [Theory]
+    [InlineData("Stored Value")]
+    [InlineData(42L)]
+    [InlineData(Math.PI)]
+    public void ValuesAreAddedToTags(object value)
     {
         //Arrange
         var testProperty = "Test Property";
 
         var p = PointData.Builder.Measurement("test");
 
-        LogEventProperty[] properties = { new LogEventProperty(testProperty, new ScalarValue("Stored Value")) };
+        LogEventProperty[] properties = { new LogEventProperty(testProperty, new ScalarValue(value)) };
 
         var le = new LogEvent(DateTime.Now, LogEventLevel.Error, new Exception(), new MessageTemplate("", Array.Empty<MessageTemplateToken>()), properties);
 
@@ -65,6 +72,6 @@ public class PointExtensionsTest
 
         tags.TryGetValue(testProperty, out var storedValue);
 
-        Assert.Equal("Stored Value", storedValue);
+        Assert.Equal(Convert.ToString(value, CultureInfo.InvariantCulture), storedValue);
     }
 }
