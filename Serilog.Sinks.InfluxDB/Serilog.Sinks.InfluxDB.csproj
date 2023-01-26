@@ -15,37 +15,37 @@
     <RepositoryType>git</RepositoryType>
     <Version>2.0.0-alpha.1</Version>    
     <PackageReleaseNotes>
-      2.0.0:
-      - A breaking change to ProcId logging from int to string
-      - A breaking change to severity_code from string to int
-      1.4.1:
-      - Update nuget dependency Serilog.Sinks.PeriodicBatching
-      1.4.0:
-      - New parameter IncludeFullException default to false
-      - Update nuget dependencies
-      1.3.2:
-      - Update nuget dependencies
-      1.3.1:
-      - Adapting namespaces
-      1.3:
-      - Handling of response with selflog and throwing exceptions letting PeriodicBatchingSink handling backoffs/retries
-      - Adding single InfluxDBSinkOptions for creating sink, kept backward compatibility for previous extension methods      -
-      - Add Benchmark tests and unit tests
-      - Add sample projects
-      - Add documentation and license (MIT)
-      - Removed unused method
-      1.2:
-      - Add instance name and rename source to application name
-      - Remove tag on message template
-      - Map facility to instance name
-      - Remove filtering of logevents and directly escape message after formatting
-      - Update to Serilog 2.10 and Serilog.Sinks.PeriodicBatching 2.3
-      1.1:
-      - Use Uri instead of address/port in extensions methods and also in InfluxDbCOnnectionInfo object
-      1.0:
-      - Forked fromhttps://github.com/ThiagoBarradas/serilog-sinks-influxdb
-      - Adaption for syslog format
-      - Fix 400 errors due to invalid characters with JSON payload</PackageReleaseNotes>
+    2.0.0:
+    - A breaking change to ProcId logging from int to string
+    - A breaking change to severity_code from string to int
+		1.4.1:
+		- Update nuget dependency Serilog.Sinks.PeriodicBatching
+		1.4.0:
+		- New parameter IncludeFullException default to false
+		- Update nuget dependencies
+		1.3.2:
+		- Update nuget dependencies
+		1.3.1:
+		- Adapting namespaces
+		1.3:
+		- Handling of response with selflog and throwing exceptions letting PeriodicBatchingSink handling backoffs/retries
+		- Adding single InfluxDBSinkOptions for creating sink, kept backward compatibility for previous extension methods      -
+		- Add Benchmark tests and unit tests
+		- Add sample projects
+		- Add documentation and license (MIT)
+		- Removed unused method
+		1.2:
+		- Add instance name and rename source to application name
+		- Remove tag on message template
+		- Map facility to instance name
+		- Remove filtering of logevents and directly escape message after formatting
+		- Update to Serilog 2.10 and Serilog.Sinks.PeriodicBatching 2.3
+		1.1:
+		- Use Uri instead of address/port in extensions methods and also in InfluxDbCOnnectionInfo object
+		1.0:
+		- Forked fromhttps://github.com/ThiagoBarradas/serilog-sinks-influxdb
+		- Adaption for syslog format
+		- Fix 400 errors due to invalid characters with JSON payload</PackageReleaseNotes>
     <AssemblyVersion>1.4.1.0</AssemblyVersion>
     <FileVersion>1.4.1.0</FileVersion>
   </PropertyGroup>
