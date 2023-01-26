@@ -100,7 +100,7 @@ namespace Serilog.Sinks.InfluxDB
                 p.Fields[Fields.Message] = StripSpecialCharacter(logEvent.RenderMessage(_formatProvider));
                 p.Fields[Fields.Facility] = 16;
                 p.Fields[Fields.ProcId] = Process.GetCurrentProcess().Id.ToString();
-                p.Fields[Fields.Severity] = severity.ToString();
+                p.Fields[Fields.Severity] = ((int)severity);
                 p.Fields[Fields.Timestamp] = logEvent.Timestamp.ToUnixTimeMilliseconds() * 1000000;
                 p.Fields[Fields.Version] = 1;
                 

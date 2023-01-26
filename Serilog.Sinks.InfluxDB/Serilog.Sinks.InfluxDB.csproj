@@ -17,6 +17,7 @@
     <PackageReleaseNotes>
       2.0.0:
       - A breaking change to ProcId logging from int to string
+      - A breaking change to severity_code from string to int
       1.4.1:
       - Update nuget dependency Serilog.Sinks.PeriodicBatching
       1.4.0:
