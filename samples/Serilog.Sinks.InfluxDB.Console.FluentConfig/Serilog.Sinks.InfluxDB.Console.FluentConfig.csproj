@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>TestConsole</AssemblyName>
     <UserSecretsId>0ec930d4-a7ee-4491-8e98-c0ac84355615</UserSecretsId>
   </PropertyGroup>
