@@ -4,17 +4,26 @@
     <Description>InfluxDB sink for Serilog with .NET standard 2.0 using syslog format for Influx1.X</Description>
     <Authors>Steven JABBOUR</Authors>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>Serilog.Sinks.InfluxDB.Syslog</PackageId>
+    <Product>Serilog.Sinks.InfluxDB.V1.Syslog</Product>
+    <PackageId>Serilog.Sinks.InfluxDB.V1.Syslog</PackageId>
     <PackageTags>serilog;logging;semantic;structured;influxdb;netcore;netcore2;netstandard2;netstandard2.0</PackageTags>
     <PackageIconUrl>http://serilog.net/images/serilog-sink-nuget.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/pada57/serilog-sinks-influxdb</PackageProjectUrl>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>    
-    <Product>Serilog.Sinks.InfluxDB.Syslog</Product>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/pada57/serilog-sinks-influxdb</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>1.4.1</Version>    
+    <Version>1.5.0</Version>    
+    <AssemblyVersion>1.5.0.0</AssemblyVersion>
+    <FileVersion>1.5.0.0</FileVersion>
     <PackageReleaseNotes>
+		1.5.0:
+		- Change V1 packageId to Serilog.Sinks.InfluxDB.V1.Syslog!!
+		- Breaking Changes to comply with syslog types specification :
+		-- Change to "procid" from int to string
+		-- Change to "severity_code" from string to int
+		- Update test projects and samples to dotnet 6
+		- Update nuget dependencies including Serilog and Serilog.Sinks.PeriodicBatching
 		1.4.1:
 		- Update nuget dependency Serilog.Sinks.PeriodicBatching
 		1.4.0:
@@ -43,14 +52,12 @@
 		- Forked fromhttps://github.com/ThiagoBarradas/serilog-sinks-influxdb
 		- Adaption for syslog format
 		- Fix 400 errors due to invalid characters with JSON payload</PackageReleaseNotes>
-    <AssemblyVersion>1.4.1.0</AssemblyVersion>
-    <FileVersion>1.4.1.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="InfluxData.Net" Version="8.0.1" />
-    <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.3.1" />
+    <PackageReference Include="Serilog" Version="2.12.0" />
+    <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="3.1.0" />
   </ItemGroup>
 
 <ItemGroup>

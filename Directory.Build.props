@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>   
+    <Copyright>Copyright © 2023</Copyright>
+
+	<TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+</Project>
