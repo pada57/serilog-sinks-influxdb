@@ -228,7 +228,7 @@ If using `appsettings.json` for configuration the following example illustrates 
 
 | Branch   | Status         |
 | -------- | -------------- |
-|Main Branch|[![Build status](https://ci.appveyor.com/api/projects/status/uc9y3i52t0dpvxq8/branch/main?svg=true)](https://ci.appveyor.com/project/MarkZither/serilog-sinks-influxdb/branch/main)|
+|Main Branch|[![Build](https://github.com/pada57/serilog-sinks-influxdb/actions/workflows/build.yml/badge.svg)](https://github.com/pada57/serilog-sinks-influxdb/actions/workflows/build.yml)|
 
 ## Benchmarks
 
