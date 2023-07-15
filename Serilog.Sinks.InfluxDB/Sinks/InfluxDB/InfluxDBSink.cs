@@ -19,6 +19,7 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
     private readonly string[]? _extendedFields;
 
     private readonly bool _includeFullException;
+    private readonly bool _includeHostname;
 
     private readonly IFormatProvider? _formatProvider;
 
@@ -61,6 +62,8 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
         _formatProvider = options.FormatProvider;
 
         _includeFullException = options.IncludeFullException ?? false;
+        
+        _includeHostname = options.IncludeHostname ?? true;
 
         CreateBucketIfNotExists();
 
@@ -91,7 +94,6 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
                 .Tag(Tags.Level, logEvent.Level.ToString())
                 .OptionalTag(Tags.AppName, _applicationName)
                 .OptionalTag(Tags.Facility, _instanceName)
-                .Tag(Tags.Hostname, Environment.MachineName)
                 .Tag(Tags.Severity, severity.ToString())
                 .Field(Fields.Message, logEvent.RenderMessage(_formatProvider).EscapeSpecialCharacters())
                 .Field(Fields.Facility, Values.Facility)
@@ -111,6 +113,11 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
                 {
                     p.Field(Fields.Exception, logEvent.Exception.ToString().EscapeSpecialCharacters());
                 }
+            }
+            
+            if (_includeHostname)
+            {
+                p.Tag(Tags.Hostname, Environment.MachineName);
             }
 
             points.Add(p.ToPointData());
