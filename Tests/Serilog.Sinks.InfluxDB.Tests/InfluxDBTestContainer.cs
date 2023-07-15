@@ -30,7 +30,8 @@ public class InfluxDBTestContainer : IAsyncLifetime, IAsyncDisposable
                     break;
             }
 
-            row.Tags["hostname"] = "HOSTNAME";
+            if (row.Tags.ContainsKey("hostname"))
+                row.Tags["hostname"] = "HOSTNAME";
         }
 
         return rows;

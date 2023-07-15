@@ -122,6 +122,18 @@ If using `appsettings.json` for configuration the following example illustrates 
 
 All those samples can be found under project subdirectory *samples* of this repository.
 
+#### Optional parameters
+```json
+"sinkOptions": {
+  "ApplicationName": "testApp",
+  "InstanceName": "testInstance",
+  "IncludeFullException": true,
+  "IncludeHostname": false,
+  "ExtendedFields": ["ReleaseNumber"],
+  "ExtendedTags": [],
+  ...
+}
+```
 
 ### InfluxDB v1.X
 

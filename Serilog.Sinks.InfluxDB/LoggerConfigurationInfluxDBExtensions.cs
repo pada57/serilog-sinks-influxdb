@@ -21,13 +21,14 @@ public static class LoggerConfigurationInfluxDBExtensions
         LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
         PeriodicBatchingSinkOptions? batchingOptions = null,
         IFormatProvider? formatProvider = null,
-        bool includeFullException = false)
+        bool includeFullException = false, 
+        bool includeHostname = true)
     {
         if (string.IsNullOrEmpty(uriString)) throw new ArgumentNullException(nameof(uriString));
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out var _)) throw new ArgumentException($"Invalid uri : {uriString}");
 
         return InfluxDB(loggerConfiguration, applicationName, new Uri(uriString), organizationId, bucketName, instanceName,
-            token, restrictedToMinimumLevel, batchingOptions, formatProvider, includeFullException);
+            token, restrictedToMinimumLevel, batchingOptions, formatProvider, includeFullException, includeHostname);
     }
 
     /// <summary>
@@ -43,13 +44,14 @@ public static class LoggerConfigurationInfluxDBExtensions
         LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
         PeriodicBatchingSinkOptions? batchingOptions = null,
         IFormatProvider? formatProvider = null,
-        bool includeFullException = false)
+        bool includeFullException = false,
+        bool includeHostname = true)
     {
         if (string.IsNullOrEmpty(uriString)) throw new ArgumentNullException(nameof(uriString));
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out var _)) throw new ArgumentException($"Invalid uri : {uriString}");
 
         return InfluxDB(loggerConfiguration, null, new Uri(uriString), organizationId, bucketName, null,
-            token, restrictedToMinimumLevel, batchingOptions, formatProvider, includeFullException);
+            token, restrictedToMinimumLevel, batchingOptions, formatProvider, includeFullException, includeHostname);
     }
 
     /// <summary>
@@ -66,7 +68,8 @@ public static class LoggerConfigurationInfluxDBExtensions
         LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
         PeriodicBatchingSinkOptions? batchingOptions = null,
         IFormatProvider? formatProvider = null,
-        bool includeFullException = false)
+        bool includeFullException = false,
+        bool includeHostname = true)
     {
         if (uri is null) throw new ArgumentNullException(nameof(uri));
         if (loggerConfiguration is null) throw new ArgumentNullException(nameof(loggerConfiguration));
@@ -85,7 +88,8 @@ public static class LoggerConfigurationInfluxDBExtensions
             },
             BatchOptions = batchingOptions,
             FormatProvider = formatProvider,
-            IncludeFullException = includeFullException
+            IncludeFullException = includeFullException,
+            IncludeHostname = includeHostname
         };
 
         return InfluxDB(loggerConfiguration, sinkOptions, restrictedToMinimumLevel);
@@ -104,7 +108,8 @@ public static class LoggerConfigurationInfluxDBExtensions
         LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
         PeriodicBatchingSinkOptions? batchingOptions = null,
         IFormatProvider? formatProvider = null,
-        bool includeFullException = false)
+        bool includeFullException = false,
+        bool includeHostname = true)
     {
         if (uri is null) throw new ArgumentNullException(nameof(uri));
         if (loggerConfiguration is null) throw new ArgumentNullException(nameof(loggerConfiguration));
@@ -121,7 +126,8 @@ public static class LoggerConfigurationInfluxDBExtensions
             },
             BatchOptions = batchingOptions,
             FormatProvider = formatProvider,
-            IncludeFullException = includeFullException
+            IncludeFullException = includeFullException,
+            IncludeHostname = includeHostname
         };
 
         return InfluxDB(loggerConfiguration, sinkOptions, restrictedToMinimumLevel);

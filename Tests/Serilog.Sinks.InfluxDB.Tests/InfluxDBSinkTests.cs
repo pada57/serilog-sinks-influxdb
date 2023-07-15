@@ -111,6 +111,65 @@ public static class InfluxDBSinkTests
         }
 
         [Fact]
+        public async Task HostNameIsLoggedIfIncludeHostnameHostnameParameterNotProvided()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                })
+                .CreateLogger();
+
+            Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync());
+        }
+
+        [Fact]
+        public async Task HostNameIsLoggedIfIncludeHostnameParameterIsTrue()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                    IncludeHostname = true
+                })
+                .CreateLogger();
+
+            Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync());
+        }
+
+        [Fact]
+        public async Task HostNameIsNotLoggedIfIncludeHostnameParameterIsFalse()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                    IncludeHostname = false,
+                })
+                .CreateLogger();
+
+            Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync());
+        }
+
+        [Fact]
         public async Task NoApplicationIsLoggedIfNotConfigured()
         {
             Log.Logger = new LoggerConfiguration()
