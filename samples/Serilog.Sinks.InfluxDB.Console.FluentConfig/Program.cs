@@ -114,7 +114,8 @@ class Program
                     EagerlyEmitFirstEvent = true,
                     QueueLimit = null
                 },
-                IncludeFullException = true
+                IncludeFullException = true,
+                IncludeHostname = false
             })
             .CreateLogger();
 

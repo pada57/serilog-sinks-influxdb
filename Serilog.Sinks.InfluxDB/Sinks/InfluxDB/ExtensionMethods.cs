@@ -45,6 +45,15 @@ static class ExtensionMethods
         return builder;
     }
 
+    public static PointData.Builder OptionalTag(this PointData.Builder builder, string name, string? value, bool? include)
+    {
+        if (include is true)
+        {
+            builder.Tag(name, value);
+        }
+        return builder;
+    }
+
     public static PointData.Builder ExtendTags(this PointData.Builder builder, LogEvent logEvent, string[]? tags)
     {
         if (tags == null)

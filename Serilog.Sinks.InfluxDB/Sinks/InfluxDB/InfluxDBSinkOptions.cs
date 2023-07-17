@@ -9,6 +9,8 @@ public class InfluxDBSinkOptions
     public string? InstanceName { get; set; }
 
     public bool? IncludeFullException { get; set; } = false;
+    
+    public bool? IncludeHostname { get; set; } = true; 
 
     public InfluxDBConnectionInfo? ConnectionInfo { get; set; } = new();
 

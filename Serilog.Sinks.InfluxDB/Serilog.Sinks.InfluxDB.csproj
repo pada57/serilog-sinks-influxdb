@@ -18,8 +18,10 @@
     <RootNamespace>Serilog</RootNamespace>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>All</AnalysisMode>
-    <Version>2.3.3</Version>
+    <Version>2.3.4</Version>
     <PackageReleaseNotes>
+      2.3.4 (only for InfluxDB v2.XX):
+      - New parameter IncludeHostname default to true
       2.3.3:
       - **Warning - Use https://www.nuget.org/packages/Serilog.Sinks.InfluxDBV1.Syslog nuget for InfluxDB V1.XX**
       - Update nuget dependencies including InfluxDB.Client which use InfluxDBClient constructor instead of InfluxDBClientFactory
