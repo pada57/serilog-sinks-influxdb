@@ -129,6 +129,8 @@ All those samples can be found under project subdirectory *samples* of this repo
   "InstanceName": "testInstance",
   "IncludeFullException": true,
   "IncludeHostname": false,
+  "IncludeLevel": true,
+  "IncludeSeverity": true,
   "ExtendedFields": ["ReleaseNumber"],
   "ExtendedTags": [],
   ...

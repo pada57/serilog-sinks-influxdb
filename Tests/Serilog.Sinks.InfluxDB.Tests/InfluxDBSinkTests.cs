@@ -111,7 +111,7 @@ public static class InfluxDBSinkTests
         }
 
         [Fact]
-        public async Task HostNameIsLoggedIfIncludeHostnameHostnameParameterNotProvided()
+        public async Task HostNameIsLoggedIfIncludeHostnameParameterNotProvided()
         {
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.InfluxDB(new InfluxDBSinkOptions
@@ -159,6 +159,124 @@ public static class InfluxDBSinkTests
                     InstanceName = string.Empty,
                     ConnectionInfo = ConnectionInfo,
                     IncludeHostname = false,
+                })
+                .CreateLogger();
+
+            Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync());
+        }
+
+        [Fact]
+        public async Task LevelIsLoggedIfIncludeLevelParameterNotProvided()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                })
+                .CreateLogger();
+
+            Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync());
+        }
+
+        [Fact]
+        public async Task LevelIsLoggedIfIncludeLevelParameterIsTrue()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                    IncludeLevel = true
+                })
+                .CreateLogger();
+
+            Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync());
+        }
+
+        [Fact]
+        public async Task LevelIsNotLoggedIfIncludeLevelParameterIsFalse()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                    IncludeLevel = false,
+                })
+                .CreateLogger();
+
+            Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync());
+        }
+
+        [Fact]
+        public async Task SeverityIsLoggedIfIncludeSeverityParameterNotProvided()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                })
+                .CreateLogger();
+
+            Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync());
+        }
+
+        [Fact]
+        public async Task SeverityIsLoggedIfIncludeSeverityParameterIsTrue()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                    IncludeSeverity = true
+                })
+                .CreateLogger();
+
+            Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync());
+        }
+
+        [Fact]
+        public async Task SeverityIsNotLoggedIfIncludeSeverityParameterIsFalse()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                    IncludeSeverity = false,
                 })
                 .CreateLogger();
 

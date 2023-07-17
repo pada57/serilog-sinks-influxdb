@@ -22,13 +22,16 @@ public static class LoggerConfigurationInfluxDBExtensions
         PeriodicBatchingSinkOptions? batchingOptions = null,
         IFormatProvider? formatProvider = null,
         bool includeFullException = false, 
-        bool includeHostname = true)
+        bool includeHostname = true, 
+        bool includeLevel = true, 
+        bool includeSeverity = true)
     {
         if (string.IsNullOrEmpty(uriString)) throw new ArgumentNullException(nameof(uriString));
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out var _)) throw new ArgumentException($"Invalid uri : {uriString}");
 
         return InfluxDB(loggerConfiguration, applicationName, new Uri(uriString), organizationId, bucketName, instanceName,
-            token, restrictedToMinimumLevel, batchingOptions, formatProvider, includeFullException, includeHostname);
+            token, restrictedToMinimumLevel, batchingOptions, formatProvider, includeFullException, includeHostname, 
+            includeLevel, includeSeverity);
     }
 
     /// <summary>
@@ -45,13 +48,16 @@ public static class LoggerConfigurationInfluxDBExtensions
         PeriodicBatchingSinkOptions? batchingOptions = null,
         IFormatProvider? formatProvider = null,
         bool includeFullException = false,
-        bool includeHostname = true)
+        bool includeHostname = true,
+        bool includeLevel = true,
+        bool includeSeverity = true)
     {
         if (string.IsNullOrEmpty(uriString)) throw new ArgumentNullException(nameof(uriString));
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out var _)) throw new ArgumentException($"Invalid uri : {uriString}");
 
         return InfluxDB(loggerConfiguration, null, new Uri(uriString), organizationId, bucketName, null,
-            token, restrictedToMinimumLevel, batchingOptions, formatProvider, includeFullException, includeHostname);
+            token, restrictedToMinimumLevel, batchingOptions, formatProvider, includeFullException, includeHostname, 
+            includeLevel, includeSeverity);
     }
 
     /// <summary>
@@ -69,7 +75,9 @@ public static class LoggerConfigurationInfluxDBExtensions
         PeriodicBatchingSinkOptions? batchingOptions = null,
         IFormatProvider? formatProvider = null,
         bool includeFullException = false,
-        bool includeHostname = true)
+        bool includeHostname = true,
+        bool includeLevel = true,
+        bool includeSeverity = true)
     {
         if (uri is null) throw new ArgumentNullException(nameof(uri));
         if (loggerConfiguration is null) throw new ArgumentNullException(nameof(loggerConfiguration));
@@ -89,7 +97,9 @@ public static class LoggerConfigurationInfluxDBExtensions
             BatchOptions = batchingOptions,
             FormatProvider = formatProvider,
             IncludeFullException = includeFullException,
-            IncludeHostname = includeHostname
+            IncludeHostname = includeHostname,
+            IncludeLevel = includeLevel,
+            IncludeSeverity = includeSeverity
         };
 
         return InfluxDB(loggerConfiguration, sinkOptions, restrictedToMinimumLevel);
@@ -109,7 +119,9 @@ public static class LoggerConfigurationInfluxDBExtensions
         PeriodicBatchingSinkOptions? batchingOptions = null,
         IFormatProvider? formatProvider = null,
         bool includeFullException = false,
-        bool includeHostname = true)
+        bool includeHostname = true,
+        bool includeLevel = true,
+        bool includeSeverity = true)
     {
         if (uri is null) throw new ArgumentNullException(nameof(uri));
         if (loggerConfiguration is null) throw new ArgumentNullException(nameof(loggerConfiguration));
@@ -127,7 +139,9 @@ public static class LoggerConfigurationInfluxDBExtensions
             BatchOptions = batchingOptions,
             FormatProvider = formatProvider,
             IncludeFullException = includeFullException,
-            IncludeHostname = includeHostname
+            IncludeHostname = includeHostname,
+            IncludeLevel = includeLevel,
+            IncludeSeverity = includeSeverity
         };
 
         return InfluxDB(loggerConfiguration, sinkOptions, restrictedToMinimumLevel);
