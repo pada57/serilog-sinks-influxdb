@@ -115,7 +115,9 @@ class Program
                     QueueLimit = null
                 },
                 IncludeFullException = true,
-                IncludeHostname = false
+                IncludeHostname = true,
+                IncludeLevel = true,
+                IncludeSeverity = true
             })
             .CreateLogger();
 

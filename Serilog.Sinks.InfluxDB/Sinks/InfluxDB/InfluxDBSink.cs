@@ -20,6 +20,8 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
 
     private readonly bool _includeFullException;
     private readonly bool _includeHostname;
+    private readonly bool _includeLevel;
+    private readonly bool _includeSeverity;
 
     private readonly IFormatProvider? _formatProvider;
 
@@ -65,6 +67,10 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
         
         _includeHostname = options.IncludeHostname ?? true;
 
+        _includeLevel = options.IncludeLevel ?? true;
+
+        _includeSeverity = options.IncludeSeverity ?? true;
+        
         CreateBucketIfNotExists();
 
         _influxDbClient = CreateInfluxDbClientWithWriteAccess();
@@ -91,11 +97,11 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
             var severity = logEvent.Level.ToSeverity();
 
             var p = PointData.Builder.Measurement(PointName)
-                .Tag(Tags.Level, logEvent.Level.ToString())
                 .OptionalTag(Tags.AppName, _applicationName)
                 .OptionalTag(Tags.Facility, _instanceName)
                 .OptionalTag(Tags.Hostname, Environment.MachineName, _includeHostname)
-                .Tag(Tags.Severity, severity.ToString())
+                .OptionalTag(Tags.Level, logEvent.Level.ToString(), _includeLevel)
+                .OptionalTag(Tags.Severity, severity.ToString(), _includeSeverity)
                 .Field(Fields.Message, logEvent.RenderMessage(_formatProvider).EscapeSpecialCharacters())
                 .Field(Fields.Facility, Values.Facility)
                 .Field(Fields.ProcId, Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture))
