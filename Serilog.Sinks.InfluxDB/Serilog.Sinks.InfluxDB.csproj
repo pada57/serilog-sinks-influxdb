@@ -18,8 +18,10 @@
     <RootNamespace>Serilog</RootNamespace>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>All</AnalysisMode>
-    <Version>2.3.4</Version>
+    <Version>2.3.5</Version>
     <PackageReleaseNotes>
+      2.3.5 (only for InfluxDB v2.XX):
+      - New parameter IncludeDefaultFields default to true to turn off all default fields
       2.3.4 (only for InfluxDB v2.XX):
       - New parameter IncludeHostname default to true
       - New parameter IncludeLevel default to true

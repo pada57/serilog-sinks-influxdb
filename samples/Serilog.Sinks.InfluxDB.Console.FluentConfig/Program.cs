@@ -117,7 +117,8 @@ class Program
                 IncludeFullException = true,
                 IncludeHostname = true,
                 IncludeLevel = true,
-                IncludeSeverity = true
+                IncludeSeverity = true,
+                IncludeDefaultFields = true
             })
             .CreateLogger();
 

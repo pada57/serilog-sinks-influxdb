@@ -22,6 +22,7 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
     private readonly bool _includeHostname;
     private readonly bool _includeLevel;
     private readonly bool _includeSeverity;
+    private readonly bool _includeDefaultFields;
 
     private readonly IFormatProvider? _formatProvider;
 
@@ -63,13 +64,14 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
         _instanceName = options.InstanceName ?? _applicationName;
         _formatProvider = options.FormatProvider;
 
+        _includeDefaultFields = options.IncludeDefaultFields ?? true;
         _includeFullException = options.IncludeFullException ?? false;
         
-        _includeHostname = options.IncludeHostname ?? true;
+        _includeHostname = options.IncludeHostname ?? _includeDefaultFields;
 
-        _includeLevel = options.IncludeLevel ?? true;
+        _includeLevel = options.IncludeLevel ?? _includeDefaultFields;
 
-        _includeSeverity = options.IncludeSeverity ?? true;
+        _includeSeverity = options.IncludeSeverity ?? _includeDefaultFields;
         
         CreateBucketIfNotExists();
 
@@ -95,6 +97,9 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
         foreach (var logEvent in logEvents)
         {
             var severity = logEvent.Level.ToSeverity();
+            var message = logEvent.RenderMessage(_formatProvider).EscapeSpecialCharacters();
+            // Skip the message if default fields are disabled and the message is blank
+            var shouldLogMessage = _includeDefaultFields || !string.IsNullOrWhiteSpace(message);
 
             var p = PointData.Builder.Measurement(PointName)
                 .OptionalTag(Tags.AppName, _applicationName)
@@ -102,12 +107,12 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
                 .OptionalTag(Tags.Hostname, Environment.MachineName, _includeHostname)
                 .OptionalTag(Tags.Level, logEvent.Level.ToString(), _includeLevel)
                 .OptionalTag(Tags.Severity, severity.ToString(), _includeSeverity)
-                .Field(Fields.Message, logEvent.RenderMessage(_formatProvider).EscapeSpecialCharacters())
-                .Field(Fields.Facility, Values.Facility)
-                .Field(Fields.ProcId, Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture))
-                .Field(Fields.Severity, severity.ToString())
-                .Field(Fields.Timestamp, logEvent.Timestamp.ToUnixTimeMilliseconds() * 1000000)
-                .Field(Fields.Version, Values.Version)
+                .OptionalField(Fields.Message, message, shouldLogMessage)
+                .OptionalField(Fields.Facility, Values.Facility, _includeDefaultFields)
+                .OptionalField(Fields.ProcId, Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture), _includeDefaultFields)
+                .OptionalField(Fields.Severity, severity.ToString(), _includeDefaultFields)
+                .OptionalField(Fields.Timestamp, logEvent.Timestamp.ToUnixTimeMilliseconds() * 1000000, _includeDefaultFields)
+                .OptionalField(Fields.Version, Values.Version, _includeDefaultFields)
                 .Timestamp(logEvent.Timestamp.UtcDateTime, WritePrecision.Ms)
                 .ExtendTags(logEvent, _extendedTags)
                 .ExtendFields(logEvent, _extendedFields);

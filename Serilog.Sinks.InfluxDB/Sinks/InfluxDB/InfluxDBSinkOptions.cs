@@ -16,6 +16,8 @@ public class InfluxDBSinkOptions
     
     public bool? IncludeSeverity { get; set; } = true;
 
+    public bool? IncludeDefaultFields { get; set; } = true;
+
     public InfluxDBConnectionInfo? ConnectionInfo { get; set; } = new();
 
     public PeriodicBatchingSinkOptions? BatchOptions { get; set; } = new();

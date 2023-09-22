@@ -1,0 +1,13 @@
+﻿[
+  {
+    Time: DateTime_1,
+    Field: MyField,
+    Value: value,
+    Tags: {
+      appname: TestApplication,
+      hostname: HOSTNAME,
+      level: Warning,
+      severity: warning
+    }
+  }
+]
