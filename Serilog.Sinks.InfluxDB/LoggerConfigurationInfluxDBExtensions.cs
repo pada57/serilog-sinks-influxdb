@@ -24,14 +24,18 @@ public static class LoggerConfigurationInfluxDBExtensions
         bool includeFullException = false, 
         bool includeHostname = true, 
         bool includeLevel = true, 
-        bool includeSeverity = true)
+        bool includeSeverity = true,
+        bool includeFacility = true,
+        bool includeTimestamp = true,
+        bool includeVersion = true,
+        bool includeProcId = true)
     {
         if (string.IsNullOrEmpty(uriString)) throw new ArgumentNullException(nameof(uriString));
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out var _)) throw new ArgumentException($"Invalid uri : {uriString}");
 
         return InfluxDB(loggerConfiguration, applicationName, new Uri(uriString), organizationId, bucketName, instanceName,
             token, restrictedToMinimumLevel, batchingOptions, formatProvider, includeFullException, includeHostname, 
-            includeLevel, includeSeverity);
+            includeLevel, includeSeverity, includeFacility, includeTimestamp, includeVersion, includeProcId);
     }
 
     /// <summary>
@@ -50,14 +54,18 @@ public static class LoggerConfigurationInfluxDBExtensions
         bool includeFullException = false,
         bool includeHostname = true,
         bool includeLevel = true,
-        bool includeSeverity = true)
+        bool includeSeverity = true,
+        bool includeFacility = true,
+        bool includeTimestamp = true,
+        bool includeVersion = true,
+        bool includeProcId = true)
     {
         if (string.IsNullOrEmpty(uriString)) throw new ArgumentNullException(nameof(uriString));
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out var _)) throw new ArgumentException($"Invalid uri : {uriString}");
 
         return InfluxDB(loggerConfiguration, null, new Uri(uriString), organizationId, bucketName, null,
             token, restrictedToMinimumLevel, batchingOptions, formatProvider, includeFullException, includeHostname, 
-            includeLevel, includeSeverity);
+            includeLevel, includeSeverity, includeFacility, includeTimestamp, includeVersion, includeProcId);
     }
 
     /// <summary>
@@ -77,7 +85,11 @@ public static class LoggerConfigurationInfluxDBExtensions
         bool includeFullException = false,
         bool includeHostname = true,
         bool includeLevel = true,
-        bool includeSeverity = true)
+        bool includeSeverity = true,
+        bool includeFacility = true,
+        bool includeTimestamp = true,
+        bool includeVersion = true,
+        bool includeProcId = true)
     {
         if (uri is null) throw new ArgumentNullException(nameof(uri));
         if (loggerConfiguration is null) throw new ArgumentNullException(nameof(loggerConfiguration));
@@ -99,7 +111,11 @@ public static class LoggerConfigurationInfluxDBExtensions
             IncludeFullException = includeFullException,
             IncludeHostname = includeHostname,
             IncludeLevel = includeLevel,
-            IncludeSeverity = includeSeverity
+            IncludeSeverity = includeSeverity,
+            IncludeFacility = includeFacility,
+            IncludeTimestamp = includeTimestamp,
+            IncludeVersion = includeVersion,
+            IncludeProcId = includeProcId,
         };
 
         return InfluxDB(loggerConfiguration, sinkOptions, restrictedToMinimumLevel);
@@ -121,7 +137,11 @@ public static class LoggerConfigurationInfluxDBExtensions
         bool includeFullException = false,
         bool includeHostname = true,
         bool includeLevel = true,
-        bool includeSeverity = true)
+        bool includeSeverity = true,
+        bool includeFacility = true,
+        bool includeTimestamp = true,
+        bool includeVersion = true,
+        bool includeProcId = true)
     {
         if (uri is null) throw new ArgumentNullException(nameof(uri));
         if (loggerConfiguration is null) throw new ArgumentNullException(nameof(loggerConfiguration));
@@ -141,8 +161,12 @@ public static class LoggerConfigurationInfluxDBExtensions
             IncludeFullException = includeFullException,
             IncludeHostname = includeHostname,
             IncludeLevel = includeLevel,
-            IncludeSeverity = includeSeverity
-        };
+            IncludeSeverity = includeSeverity,
+            IncludeFacility = includeFacility,
+            IncludeTimestamp = includeTimestamp,
+            IncludeVersion = includeVersion,
+            IncludeProcId = includeProcId,
+    };
 
         return InfluxDB(loggerConfiguration, sinkOptions, restrictedToMinimumLevel);
     }

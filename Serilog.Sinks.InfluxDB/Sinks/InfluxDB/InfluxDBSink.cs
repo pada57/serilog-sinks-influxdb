@@ -22,6 +22,10 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
     private readonly bool _includeHostname;
     private readonly bool _includeLevel;
     private readonly bool _includeSeverity;
+    private readonly bool _includeFacility;
+    private readonly bool _includeTimestamp;
+    private readonly bool _includeVersion;
+    private readonly bool _includeProcId;
 
     private readonly IFormatProvider? _formatProvider;
 
@@ -71,6 +75,11 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
 
         _includeSeverity = options.IncludeSeverity ?? true;
         
+        _includeFacility = options.IncludeFacility ?? true;
+        _includeTimestamp = options.IncludeTimestamp ?? true;
+        _includeVersion = options.IncludeVersion ?? true;
+        _includeProcId = options.IncludeProcId ?? true;
+
         CreateBucketIfNotExists();
 
         _influxDbClient = CreateInfluxDbClientWithWriteAccess();
@@ -102,12 +111,12 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
                 .OptionalTag(Tags.Hostname, Environment.MachineName, _includeHostname)
                 .OptionalTag(Tags.Level, logEvent.Level.ToString(), _includeLevel)
                 .OptionalTag(Tags.Severity, severity.ToString(), _includeSeverity)
-                .Field(Fields.Message, logEvent.RenderMessage(_formatProvider).EscapeSpecialCharacters())
-                .Field(Fields.Facility, Values.Facility)
-                .Field(Fields.ProcId, Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture))
-                .Field(Fields.Severity, severity.ToString())
-                .Field(Fields.Timestamp, logEvent.Timestamp.ToUnixTimeMilliseconds() * 1000000)
-                .Field(Fields.Version, Values.Version)
+                .OptionalField(Fields.Message, logEvent.RenderMessage(_formatProvider).EscapeSpecialCharacters())
+                .OptionalField(Fields.Facility, Values.Facility, _includeFacility)
+                .OptionalField(Fields.ProcId, Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture), _includeProcId)
+                .OptionalField(Fields.Severity, severity.ToString(), _includeSeverity)
+                .OptionalField(Fields.Timestamp, logEvent.Timestamp.ToUnixTimeMilliseconds() * 1000000, _includeTimestamp)
+                .OptionalField(Fields.Version, Values.Version, _includeVersion)
                 .Timestamp(logEvent.Timestamp.UtcDateTime, WritePrecision.Ms)
                 .ExtendTags(logEvent, _extendedTags)
                 .ExtendFields(logEvent, _extendedFields);

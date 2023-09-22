@@ -131,6 +131,10 @@ All those samples can be found under project subdirectory *samples* of this repo
   "IncludeHostname": false,
   "IncludeLevel": true,
   "IncludeSeverity": true,
+  "IncludeFacility": true,
+  "IncludeTimestamp": true,
+  "IncludeVersion": true,
+  "IncludeProcId": true,
   "ExtendedFields": ["ReleaseNumber"],
   "ExtendedTags": [],
   ...

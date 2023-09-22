@@ -6,7 +6,8 @@
     Tags: {
       appname: TestApplication,
       hostname: HOSTNAME,
-      level: Warning
+      level: Warning,
+      severity: warning
     }
   },
   {
@@ -17,18 +18,20 @@
     Tags: {
       appname: TestApplication,
       hostname: HOSTNAME,
-      level: Warning
+      level: Warning,
+      severity: warning
     }
   },
   {
     Time: DateTime_1,
     Table: 2,
-    Field: procid,
-    Value: PROCID,
+    Field: severity_code,
+    Value: warning,
     Tags: {
       appname: TestApplication,
       hostname: HOSTNAME,
-      level: Warning
+      level: Warning,
+      severity: warning
     }
   },
   {
@@ -39,7 +42,8 @@
     Tags: {
       appname: TestApplication,
       hostname: HOSTNAME,
-      level: Warning
+      level: Warning,
+      severity: warning
     }
   },
   {
@@ -50,7 +54,8 @@
     Tags: {
       appname: TestApplication,
       hostname: HOSTNAME,
-      level: Warning
+      level: Warning,
+      severity: warning
     }
   }
 ]

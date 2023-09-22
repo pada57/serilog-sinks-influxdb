@@ -6,7 +6,8 @@
     Tags: {
       appname: TestApplication,
       hostname: HOSTNAME,
-      level: Warning
+      level: Warning,
+      severity: warning
     }
   },
   {
@@ -17,7 +18,8 @@
     Tags: {
       appname: TestApplication,
       hostname: HOSTNAME,
-      level: Warning
+      level: Warning,
+      severity: warning
     }
   },
   {
@@ -28,29 +30,32 @@
     Tags: {
       appname: TestApplication,
       hostname: HOSTNAME,
-      level: Warning
+      level: Warning,
+      severity: warning
     }
   },
   {
     Time: DateTime_1,
     Table: 3,
-    Field: timestamp,
-    Value: TIMESTAMP,
+    Field: severity_code,
+    Value: warning,
     Tags: {
       appname: TestApplication,
       hostname: HOSTNAME,
-      level: Warning
+      level: Warning,
+      severity: warning
     }
   },
   {
     Time: DateTime_1,
     Table: 4,
-    Field: version,
-    Value: 1,
+    Field: timestamp,
+    Value: TIMESTAMP,
     Tags: {
       appname: TestApplication,
       hostname: HOSTNAME,
-      level: Warning
+      level: Warning,
+      severity: warning
     }
   }
 ]

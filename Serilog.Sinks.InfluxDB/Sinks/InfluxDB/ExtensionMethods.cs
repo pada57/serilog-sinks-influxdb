@@ -128,6 +128,24 @@ static class ExtensionMethods
         return builder;
     }
 
+    public static PointData.Builder OptionalField(this PointData.Builder builder, string name, string? value)
+    {
+        if (!string.IsNullOrWhiteSpace(value))
+        {
+            builder.Field(name, value);
+        }
+        return builder;
+    }
+
+    public static PointData.Builder OptionalField(this PointData.Builder builder, string name, object? value, bool? include)
+    {
+        if (include is true)
+        {
+            builder.Field(name, value);
+        }
+        return builder;
+    }
+
     private static (string, string) SplitIfColumnPresent(this string value)
     {
         var i = value.IndexOf(':');

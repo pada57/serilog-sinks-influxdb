@@ -117,7 +117,11 @@ class Program
                 IncludeFullException = true,
                 IncludeHostname = true,
                 IncludeLevel = true,
-                IncludeSeverity = true
+                IncludeSeverity = true,
+                IncludeFacility = true,
+                IncludeTimestamp = true,
+                IncludeVersion = true,
+                IncludeProcId = true
             })
             .CreateLogger();
 

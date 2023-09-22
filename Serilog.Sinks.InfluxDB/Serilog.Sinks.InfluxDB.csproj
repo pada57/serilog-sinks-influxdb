@@ -18,8 +18,14 @@
     <RootNamespace>Serilog</RootNamespace>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>All</AnalysisMode>
-    <Version>2.3.4</Version>
+    <Version>2.3.5</Version>
     <PackageReleaseNotes>
+      2.3.5 (only for InfluxDB v2.XX):
+      - New parameter IncludeFacility default to true
+      - New parameter IncludeTimestamp default to true
+      - New parameter IncludeVersion default to true
+      - New parameter IncludeProcId default to true
+      - IncludeSeverity now turns off field as well as tag
       2.3.4 (only for InfluxDB v2.XX):
       - New parameter IncludeHostname default to true
       - New parameter IncludeLevel default to true

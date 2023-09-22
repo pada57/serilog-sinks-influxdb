@@ -16,6 +16,14 @@ public class InfluxDBSinkOptions
     
     public bool? IncludeSeverity { get; set; } = true;
 
+    public bool? IncludeFacility { get; set; } = true;
+
+    public bool? IncludeTimestamp { get; set; } = true;
+
+    public bool? IncludeVersion { get; set; } = true;
+
+    public bool? IncludeProcId { get; set; } = true;
+
     public InfluxDBConnectionInfo? ConnectionInfo { get; set; } = new();
 
     public PeriodicBatchingSinkOptions? BatchOptions { get; set; } = new();

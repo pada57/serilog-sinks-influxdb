@@ -4,31 +4,31 @@
     Field: facility_code,
     Value: 16,
     Tags: {
-      appname: TestApplication,
       hostname: HOSTNAME,
-      level: Warning
+      level: Warning,
+      severity: warning
     }
   },
   {
     Time: DateTime_1,
     Table: 1,
-    Field: message,
-    Value: Some warning "Some parameter",
+    Field: procid,
+    Value: PROCID,
     Tags: {
-      appname: TestApplication,
       hostname: HOSTNAME,
-      level: Warning
+      level: Warning,
+      severity: warning
     }
   },
   {
     Time: DateTime_1,
     Table: 2,
-    Field: procid,
-    Value: PROCID,
+    Field: severity_code,
+    Value: warning,
     Tags: {
-      appname: TestApplication,
       hostname: HOSTNAME,
-      level: Warning
+      level: Warning,
+      severity: warning
     }
   },
   {
@@ -37,9 +37,9 @@
     Field: timestamp,
     Value: TIMESTAMP,
     Tags: {
-      appname: TestApplication,
       hostname: HOSTNAME,
-      level: Warning
+      level: Warning,
+      severity: warning
     }
   },
   {
@@ -48,9 +48,9 @@
     Field: version,
     Value: 1,
     Tags: {
-      appname: TestApplication,
       hostname: HOSTNAME,
-      level: Warning
+      level: Warning,
+      severity: warning
     }
   }
 ]
