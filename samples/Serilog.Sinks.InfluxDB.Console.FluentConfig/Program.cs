@@ -93,6 +93,7 @@ class Program
         Log.Logger = new LoggerConfiguration()
             .WriteTo.InfluxDB(new InfluxDBSinkOptions()
             {
+                MeasurementName = "syslog",
                 ApplicationName = "fluentSample",
                 InstanceName = "fluentSampleInstance",
                 ConnectionInfo = new InfluxDBConnectionInfo()

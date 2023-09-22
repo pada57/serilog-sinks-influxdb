@@ -15,9 +15,9 @@ public class InfluxDBTestContainer : IAsyncLifetime, IAsyncDisposable
     public Bucket DefaultBucket { get; private set; } = null!;
     public ushort Port { get; private set; }
 
-    public async Task<ICollection<QueryResult>> GetAllRowsAsync()
+    public async Task<ICollection<QueryResult>> GetAllRowsAsync(string measurementName = "syslog")
     {
-        var rows = await GetAllRowsRawAsync();
+        var rows = await GetAllRowsRawAsync(measurementName: measurementName);
 
         // replace volatile values with constants to simplify testing.
         foreach (var row in rows)
@@ -45,14 +45,14 @@ public class InfluxDBTestContainer : IAsyncLifetime, IAsyncDisposable
         OrganizationId = DefaultBucket.OrgID
     };
 
-    private async Task<ICollection<QueryResult>> GetAllRowsRawAsync(string? bucketName = null)
+    private async Task<ICollection<QueryResult>> GetAllRowsRawAsync(string? bucketName = null, string measurementName = "syslog")
     {
         bucketName ??= DefaultBucket.Name;
 
         var query = $"""
     from(bucket: "{bucketName}")
       |> range(start: -1h)
-      |> filter(fn: (r) => r["_measurement"] == "syslog")
+      |> filter(fn: (r) => r["_measurement"] == "{measurementName}")
     """;
 
         var result = new List<QueryResult>();

@@ -4,6 +4,8 @@ namespace Serilog.Sinks.InfluxDB;
 
 public class InfluxDBSinkOptions
 {
+    public string? MeasurementName { get; set; }
+
     public string? ApplicationName { get; set; }
 
     public string? InstanceName { get; set; }

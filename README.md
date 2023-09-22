@@ -125,6 +125,7 @@ All those samples can be found under project subdirectory *samples* of this repo
 #### Optional parameters
 ```json
 "sinkOptions": {
+  "MeasurementName": "syslog",
   "ApplicationName": "testApp",
   "InstanceName": "testInstance",
   "IncludeFullException": true,

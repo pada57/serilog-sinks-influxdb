@@ -111,6 +111,45 @@ public static class InfluxDBSinkTests
         }
 
         [Fact]
+        public async Task MeasurementNameIsLoggedAsSysLogIfIncludeMeasurementNameParameterNotProvided()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                })
+                .CreateLogger();
+
+            Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync());
+        }
+
+        [Fact]
+        public async Task MeasurementNameIsLoggedIfMeasurementNameParameterIsSpecified()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                    MeasurementName = "MyPoint"
+                })
+                .CreateLogger();
+
+            Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync("MyPoint"));
+        }
+
+        [Fact]
         public async Task HostNameIsLoggedIfIncludeHostnameParameterNotProvided()
         {
             Log.Logger = new LoggerConfiguration()

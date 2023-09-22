@@ -22,6 +22,7 @@
     <PackageReleaseNotes>
       2.3.5 (only for InfluxDB v2.XX):
       - New parameter IncludeDefaultFields default to true to turn off all default fields
+      - New parameter MeasurementName to allow measurement name to be customised
       2.3.4 (only for InfluxDB v2.XX):
       - New parameter IncludeHostname default to true
       - New parameter IncludeLevel default to true

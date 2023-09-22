@@ -13,6 +13,7 @@ namespace Serilog.Sinks.InfluxDB;
 
 internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
 {
+    private readonly string? _measurementName;
     private readonly string? _applicationName;
     private readonly string? _instanceName;
     private readonly string[]? _extendedTags;
@@ -60,6 +61,7 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
         if (_authMethod == AuthMethods.Token && string.IsNullOrWhiteSpace(_connectionInfo.Token) && string.IsNullOrWhiteSpace(_connectionInfo.AllAccessToken) && string.IsNullOrWhiteSpace(_connectionInfo.Username))
             throw new ArgumentNullException(nameof(_connectionInfo.Token), $"At least one Token should be given either {nameof(_connectionInfo.Token)} if already created with write permissions or {nameof(_connectionInfo.AllAccessToken)}");
 
+        _measurementName = options.MeasurementName ?? MeasurementName;
         _applicationName = options.ApplicationName;
         _instanceName = options.InstanceName ?? _applicationName;
         _formatProvider = options.FormatProvider;
@@ -101,7 +103,7 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
             // Skip the message if default fields are disabled and the message is blank
             var shouldLogMessage = _includeDefaultFields || !string.IsNullOrWhiteSpace(message);
 
-            var p = PointData.Builder.Measurement(PointName)
+            var p = PointData.Builder.Measurement(_measurementName)
                 .OptionalTag(Tags.AppName, _applicationName)
                 .OptionalTag(Tags.Facility, _instanceName)
                 .OptionalTag(Tags.Hostname, Environment.MachineName, _includeHostname)
