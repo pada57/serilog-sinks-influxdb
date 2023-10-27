@@ -15,6 +15,11 @@ public class InfluxDBTestContainer : IAsyncLifetime, IAsyncDisposable
     public Bucket DefaultBucket { get; private set; } = null!;
     public ushort Port { get; private set; }
 
+    static InfluxDBTestContainer()
+    {
+        Environment.SetEnvironmentVariable("TESTCONTAINERS_RYUK_DISABLED", "true");
+    }
+
     public async Task<ICollection<QueryResult>> GetAllRowsAsync(string measurementName = "syslog")
     {
         var rows = await GetAllRowsRawAsync(measurementName: measurementName);
@@ -140,5 +145,7 @@ public class InfluxDBTestContainer : IAsyncLifetime, IAsyncDisposable
         InfluxDBClient.Dispose();
 
         await TestContainer.DisposeAsync();
+
+        GC.SuppressFinalize(this);
     }
 }
