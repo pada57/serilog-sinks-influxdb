@@ -1,0 +1,13 @@
+﻿[
+  {
+    Time: DateTime_1,
+    Field: message,
+    Value: Some warning "Some parameter",
+    Tags: {
+      appname: TestApplication,
+      hostname: HOSTNAME,
+      level: Warning,
+      severity: warning
+    }
+  }
+]

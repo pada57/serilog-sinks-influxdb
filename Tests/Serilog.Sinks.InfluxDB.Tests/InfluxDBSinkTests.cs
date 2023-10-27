@@ -111,6 +111,45 @@ public static class InfluxDBSinkTests
         }
 
         [Fact]
+        public async Task MeasurementNameIsLoggedAsSysLogIfIncludeMeasurementNameParameterNotProvided()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                })
+                .CreateLogger();
+
+            Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync());
+        }
+
+        [Fact]
+        public async Task MeasurementNameIsLoggedIfMeasurementNameParameterIsSpecified()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                    MeasurementName = "MyPoint"
+                })
+                .CreateLogger();
+
+            Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync("MyPoint"));
+        }
+
+        [Fact]
         public async Task HostNameIsLoggedIfIncludeHostnameParameterNotProvided()
         {
             Log.Logger = new LoggerConfiguration()
@@ -281,6 +320,100 @@ public static class InfluxDBSinkTests
                 .CreateLogger();
 
             Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync());
+        }
+
+        [Fact]
+        public async Task DefaultFieldsAreLoggedIfIncludeDefaultFieldsParameterNotProvided()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                })
+                .CreateLogger();
+
+            Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync());
+        }
+
+        [Fact]
+        public async Task DefaultFieldsAreLoggedIfIncludeDefaultFieldsParameterIsTrue()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                    IncludeDefaultFields = true
+                })
+                .CreateLogger();
+
+            Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync());
+        }
+
+        [Fact]
+        public async Task DefaultFieldsAreNotLoggedIfIncludeDefaultFieldsParameterIsFalse()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                    IncludeDefaultFields = false,
+                })
+                .CreateLogger();
+
+            Log.Warning("Some warning {Parameter}", "Some parameter");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync());
+        }
+
+        [Fact]
+        public async Task OnlyPropertiesAreLoggedLoggedIfIncludeDefaultFieldsParameterIsFalseAndMessageIsEmpty()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions
+                {
+                    ApplicationName = "TestApplication",
+                    InstanceName = string.Empty,
+                    ConnectionInfo = ConnectionInfo,
+                    IncludeDefaultFields = false,
+                    ExtendedFields = new[] { "MyField" }
+                })
+                .CreateLogger();
+
+            Log.ForContext("MyField", "value").Warning("");
+
+            await Log.CloseAndFlushAsync();
+
+            await Verify(GetAllRowsAsync());
+        }
+
+        [Fact]
+        public async Task EmptyMessagesAreLogged()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.InfluxDB(new InfluxDBSinkOptions { ConnectionInfo = ConnectionInfo })
+                .CreateLogger();
+
+            Log.Warning("");
 
             await Log.CloseAndFlushAsync();
 

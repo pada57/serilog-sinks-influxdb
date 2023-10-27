@@ -13,6 +13,7 @@ namespace Serilog.Sinks.InfluxDB;
 
 internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
 {
+    private readonly string? _measurementName;
     private readonly string? _applicationName;
     private readonly string? _instanceName;
     private readonly string[]? _extendedTags;
@@ -22,6 +23,7 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
     private readonly bool _includeHostname;
     private readonly bool _includeLevel;
     private readonly bool _includeSeverity;
+    private readonly bool _includeDefaultFields;
 
     private readonly IFormatProvider? _formatProvider;
 
@@ -59,17 +61,19 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
         if (_authMethod == AuthMethods.Token && string.IsNullOrWhiteSpace(_connectionInfo.Token) && string.IsNullOrWhiteSpace(_connectionInfo.AllAccessToken) && string.IsNullOrWhiteSpace(_connectionInfo.Username))
             throw new ArgumentNullException(nameof(_connectionInfo.Token), $"At least one Token should be given either {nameof(_connectionInfo.Token)} if already created with write permissions or {nameof(_connectionInfo.AllAccessToken)}");
 
+        _measurementName = options.MeasurementName ?? MeasurementName;
         _applicationName = options.ApplicationName;
         _instanceName = options.InstanceName ?? _applicationName;
         _formatProvider = options.FormatProvider;
 
+        _includeDefaultFields = options.IncludeDefaultFields ?? true;
         _includeFullException = options.IncludeFullException ?? false;
         
-        _includeHostname = options.IncludeHostname ?? true;
+        _includeHostname = options.IncludeHostname ?? _includeDefaultFields;
 
-        _includeLevel = options.IncludeLevel ?? true;
+        _includeLevel = options.IncludeLevel ?? _includeDefaultFields;
 
-        _includeSeverity = options.IncludeSeverity ?? true;
+        _includeSeverity = options.IncludeSeverity ?? _includeDefaultFields;
         
         CreateBucketIfNotExists();
 
@@ -95,19 +99,22 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
         foreach (var logEvent in logEvents)
         {
             var severity = logEvent.Level.ToSeverity();
+            var message = logEvent.RenderMessage(_formatProvider).EscapeSpecialCharacters();
+            // Skip the message if default fields are disabled and the message is blank
+            var shouldLogMessage = _includeDefaultFields || !string.IsNullOrWhiteSpace(message);
 
-            var p = PointData.Builder.Measurement(PointName)
+            var p = PointData.Builder.Measurement(_measurementName)
                 .OptionalTag(Tags.AppName, _applicationName)
                 .OptionalTag(Tags.Facility, _instanceName)
                 .OptionalTag(Tags.Hostname, Environment.MachineName, _includeHostname)
                 .OptionalTag(Tags.Level, logEvent.Level.ToString(), _includeLevel)
                 .OptionalTag(Tags.Severity, severity.ToString(), _includeSeverity)
-                .Field(Fields.Message, logEvent.RenderMessage(_formatProvider).EscapeSpecialCharacters())
-                .Field(Fields.Facility, Values.Facility)
-                .Field(Fields.ProcId, Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture))
-                .Field(Fields.Severity, severity.ToString())
-                .Field(Fields.Timestamp, logEvent.Timestamp.ToUnixTimeMilliseconds() * 1000000)
-                .Field(Fields.Version, Values.Version)
+                .OptionalField(Fields.Message, message, shouldLogMessage)
+                .OptionalField(Fields.Facility, Values.Facility, _includeDefaultFields)
+                .OptionalField(Fields.ProcId, Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture), _includeDefaultFields)
+                .OptionalField(Fields.Severity, severity.ToString(), _includeDefaultFields)
+                .OptionalField(Fields.Timestamp, logEvent.Timestamp.ToUnixTimeMilliseconds() * 1000000, _includeDefaultFields)
+                .OptionalField(Fields.Version, Values.Version, _includeDefaultFields)
                 .Timestamp(logEvent.Timestamp.UtcDateTime, WritePrecision.Ms)
                 .ExtendTags(logEvent, _extendedTags)
                 .ExtendFields(logEvent, _extendedFields);

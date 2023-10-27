@@ -24,14 +24,16 @@ public static class LoggerConfigurationInfluxDBExtensions
         bool includeFullException = false, 
         bool includeHostname = true, 
         bool includeLevel = true, 
-        bool includeSeverity = true)
+        bool includeSeverity = true,
+        bool includeDefaultFields = true,
+        string? measurementName = null)
     {
         if (string.IsNullOrEmpty(uriString)) throw new ArgumentNullException(nameof(uriString));
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out var _)) throw new ArgumentException($"Invalid uri : {uriString}");
 
         return InfluxDB(loggerConfiguration, applicationName, new Uri(uriString), organizationId, bucketName, instanceName,
             token, restrictedToMinimumLevel, batchingOptions, formatProvider, includeFullException, includeHostname, 
-            includeLevel, includeSeverity);
+            includeLevel, includeSeverity, includeDefaultFields, measurementName);
     }
 
     /// <summary>
@@ -50,14 +52,16 @@ public static class LoggerConfigurationInfluxDBExtensions
         bool includeFullException = false,
         bool includeHostname = true,
         bool includeLevel = true,
-        bool includeSeverity = true)
+        bool includeSeverity = true,
+        bool includeDefaultFields = true,
+        string? measurementName = null)
     {
         if (string.IsNullOrEmpty(uriString)) throw new ArgumentNullException(nameof(uriString));
         if (!Uri.TryCreate(uriString, UriKind.Absolute, out var _)) throw new ArgumentException($"Invalid uri : {uriString}");
 
         return InfluxDB(loggerConfiguration, null, new Uri(uriString), organizationId, bucketName, null,
             token, restrictedToMinimumLevel, batchingOptions, formatProvider, includeFullException, includeHostname, 
-            includeLevel, includeSeverity);
+            includeLevel, includeSeverity, includeDefaultFields, measurementName);
     }
 
     /// <summary>
@@ -77,7 +81,9 @@ public static class LoggerConfigurationInfluxDBExtensions
         bool includeFullException = false,
         bool includeHostname = true,
         bool includeLevel = true,
-        bool includeSeverity = true)
+        bool includeSeverity = true,
+        bool includeDefaultFields = true,
+        string? measurementName = null)
     {
         if (uri is null) throw new ArgumentNullException(nameof(uri));
         if (loggerConfiguration is null) throw new ArgumentNullException(nameof(loggerConfiguration));
@@ -96,10 +102,12 @@ public static class LoggerConfigurationInfluxDBExtensions
             },
             BatchOptions = batchingOptions,
             FormatProvider = formatProvider,
+            MeasurementName = measurementName,
             IncludeFullException = includeFullException,
             IncludeHostname = includeHostname,
             IncludeLevel = includeLevel,
-            IncludeSeverity = includeSeverity
+            IncludeSeverity = includeSeverity,
+            IncludeDefaultFields = includeDefaultFields
         };
 
         return InfluxDB(loggerConfiguration, sinkOptions, restrictedToMinimumLevel);
@@ -121,7 +129,9 @@ public static class LoggerConfigurationInfluxDBExtensions
         bool includeFullException = false,
         bool includeHostname = true,
         bool includeLevel = true,
-        bool includeSeverity = true)
+        bool includeSeverity = true,
+        bool includeDefaultFields = true,
+        string? measurementName = null)
     {
         if (uri is null) throw new ArgumentNullException(nameof(uri));
         if (loggerConfiguration is null) throw new ArgumentNullException(nameof(loggerConfiguration));
@@ -138,10 +148,12 @@ public static class LoggerConfigurationInfluxDBExtensions
             },
             BatchOptions = batchingOptions,
             FormatProvider = formatProvider,
+            MeasurementName = measurementName,
             IncludeFullException = includeFullException,
             IncludeHostname = includeHostname,
             IncludeLevel = includeLevel,
-            IncludeSeverity = includeSeverity
+            IncludeSeverity = includeSeverity,
+            IncludeDefaultFields = includeDefaultFields
         };
 
         return InfluxDB(loggerConfiguration, sinkOptions, restrictedToMinimumLevel);

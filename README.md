@@ -2,7 +2,7 @@
 [![Build](https://github.com/pada57/serilog-sinks-influxdb/actions/workflows/build.yml/badge.svg)](https://github.com/pada57/serilog-sinks-influxdb/actions/workflows/build.yml)
 [![nuget](https://img.shields.io/nuget/v/Serilog.Sinks.InfluxDB.Syslog.svg)](https://www.nuget.org/packages/Serilog.Sinks.InfluxDB.Syslog)
 
-A serilog sink that writes events to [InfluxDB](https://www.influxdata.com/) in syslog message format as described on the [Influx blog](https://www.influxdata.com/blog/writing-logs-directly-to-influxdb/).
+A serilog sink that writes events to [InfluxDB](https://www.influxdata.com/) in syslog message format (by default) as described on the [Influx blog](https://www.influxdata.com/blog/writing-logs-directly-to-influxdb/). The exact fields, tags and even measurement names can be customised via the sink configuration, as outlined below.
 Supports platforms compatible with the [.NET Platform Standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) `netstandard2.0`.
 
 Compatible only with InfluxDB v2.0 and upwards
@@ -125,17 +125,46 @@ All those samples can be found under project subdirectory *samples* of this repo
 #### Optional parameters
 ```json
 "sinkOptions": {
+  "MeasurementName": "syslog",
   "ApplicationName": "testApp",
   "InstanceName": "testInstance",
   "IncludeFullException": true,
   "IncludeHostname": false,
   "IncludeLevel": true,
   "IncludeSeverity": true,
+  "IncludeDefaultFields": true,
   "ExtendedFields": ["ReleaseNumber"],
   "ExtendedTags": [],
   ...
 }
 ```
+
+#### Non-syslog format support
+Since initial creation of this plugin, InfluxDB now supports a more flexible logging approach that eliminates the strict requirement of the syslog format. This means it's possible to create leaner logging payloads without the additional syslog-specific entries with a configuration such as the following:
+
+```json
+"sinkOptions": {
+  "MeasurementName": "mymeasurement",
+  "IncludeHostname": false,
+  "IncludeLevel": false,
+  "IncludeSeverity": false,
+  "IncludeDefaultFields": false,
+  ...
+}
+```
+
+This configuration will produce a log entry with only a message and time:
+```json
+[
+  {
+    Time: DateTime_1,
+    Field: message,
+    Value: Some warning "Some parameter",
+    Tags: {}
+  }
+]
+```
+
 
 ### InfluxDB v1.X
 

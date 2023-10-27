@@ -93,6 +93,7 @@ class Program
         Log.Logger = new LoggerConfiguration()
             .WriteTo.InfluxDB(new InfluxDBSinkOptions()
             {
+                MeasurementName = "syslog",
                 ApplicationName = "fluentSample",
                 InstanceName = "fluentSampleInstance",
                 ConnectionInfo = new InfluxDBConnectionInfo()
@@ -117,7 +118,8 @@ class Program
                 IncludeFullException = true,
                 IncludeHostname = true,
                 IncludeLevel = true,
-                IncludeSeverity = true
+                IncludeSeverity = true,
+                IncludeDefaultFields = true
             })
             .CreateLogger();
 

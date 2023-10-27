@@ -2,7 +2,7 @@
 
 internal static class SyslogConst
 {
-    public const string PointName = "syslog";
+    public const string MeasurementName = "syslog";
 
     public static class Tags
     {
