@@ -18,8 +18,11 @@
     <RootNamespace>Serilog</RootNamespace>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>All</AnalysisMode>
-    <Version>2.3.5</Version>
+    <Version>2.3.6</Version>
     <PackageReleaseNotes>
+      2.3.6 (only for InfluxDB v2.XX):
+      - Update nuget dependencies including InfluxDB.Client which use InfluxDBClient constructor instead of InfluxDBClientFactory
+      - Update test projects to dotnet 9 sdk and add global.json to fix sdk
       2.3.5 (only for InfluxDB v2.XX):
       - New parameter IncludeDefaultFields default to true to turn off all default fields
       - New parameter MeasurementName to allow measurement name to be customised
@@ -91,13 +94,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="InfluxDB.Client" Version="4.13.0" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+    <PackageReference Include="InfluxDB.Client" Version="4.18.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Serilog" Version="3.0.1" />
-    <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="3.1.0" />
+    <PackageReference Include="Serilog" Version="4.2.0" />
+    <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="5.0.0" />
+    <PackageReference Include="System.Text.Json" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>

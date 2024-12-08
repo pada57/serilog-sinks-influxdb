@@ -70,7 +70,6 @@ public static class InfluxDBSinkTests
         }
     }
 
-    [UsesVerify]
     public class GivenSpecificConfigurations : InfluxDBTestContainer
     {
         [Fact]
@@ -511,7 +510,6 @@ public static class InfluxDBSinkTests
         }
     }
 
-    [UsesVerify]
     public class GivenVariousInputData : InfluxDBTestContainer
     {
         [Fact]
