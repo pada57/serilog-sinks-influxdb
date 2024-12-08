@@ -54,12 +54,20 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
         if (_connectionInfo.OrganizationId is null) throw new ArgumentException("ConnectionInfo.OrganizationId is required", nameof(options));
 
         if (string.IsNullOrWhiteSpace(_connectionInfo.Token) && string.IsNullOrWhiteSpace(_connectionInfo.AllAccessToken) && string.IsNullOrWhiteSpace(_connectionInfo.Username))
-            throw new ArgumentException($"At least one authentication field should be provided: {nameof(_connectionInfo.Username)}/{nameof(_connectionInfo.Password)} or {nameof(_connectionInfo.Token)}({nameof(_connectionInfo.AllAccessToken)} If Buckets has to be check and created if needed)");
+        {
+            var errorMessage = $"At least one authentication field should be provided: {nameof(_connectionInfo.Username)}/{nameof(_connectionInfo.Password)} or {nameof(_connectionInfo.Token)}({nameof(_connectionInfo.AllAccessToken)} If Buckets has to be check and created if needed)";
+            var paramName = nameof(_connectionInfo.Token);
+            throw new ArgumentException(errorMessage, paramName);
+        }
 
         _authMethod = string.IsNullOrWhiteSpace(_connectionInfo.Username) ? AuthMethods.Token : AuthMethods.Credentials;
 
         if (_authMethod == AuthMethods.Token && string.IsNullOrWhiteSpace(_connectionInfo.Token) && string.IsNullOrWhiteSpace(_connectionInfo.AllAccessToken) && string.IsNullOrWhiteSpace(_connectionInfo.Username))
-            throw new ArgumentNullException(nameof(_connectionInfo.Token), $"At least one Token should be given either {nameof(_connectionInfo.Token)} if already created with write permissions or {nameof(_connectionInfo.AllAccessToken)}");
+        {
+            var errorMessage = $"At least one Token should be given either {nameof(_connectionInfo.Token)} if already created with write permissions or {nameof(_connectionInfo.AllAccessToken)}";
+            var paramName = nameof(_connectionInfo.Token);
+            throw new ArgumentNullException(paramName, errorMessage);
+        }
 
         _measurementName = options.MeasurementName ?? MeasurementName;
         _applicationName = options.ApplicationName;
@@ -68,13 +76,13 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
 
         _includeDefaultFields = options.IncludeDefaultFields ?? true;
         _includeFullException = options.IncludeFullException ?? false;
-        
+
         _includeHostname = options.IncludeHostname ?? _includeDefaultFields;
 
         _includeLevel = options.IncludeLevel ?? _includeDefaultFields;
 
         _includeSeverity = options.IncludeSeverity ?? _includeDefaultFields;
-        
+
         CreateBucketIfNotExists();
 
         _influxDbClient = CreateInfluxDbClientWithWriteAccess();
@@ -128,7 +136,7 @@ internal class InfluxDBSink : IBatchedLogEventSink, IDisposable
                     p.Field(Fields.Exception, logEvent.Exception.ToString().EscapeSpecialCharacters());
                 }
             }
-            
+
             points.Add(p.ToPointData());
         }
 
